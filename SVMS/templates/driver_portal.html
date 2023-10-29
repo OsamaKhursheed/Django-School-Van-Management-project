@@ -1,0 +1,406 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Driver Portal - School Van Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .image-frame {
+        border-radius: 50%;
+        overflow: hidden;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin-left: 5px;
+    }
+
+    .open-btn {
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .sidebar {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 0px;
+        left: -250px;
+        background-color: white;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 25px;
+        border-radius: 0 0 15px 0;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    .sidebar-button {
+        text-align: left;
+        text-decoration: none;
+        color: black;
+        transition: 0.3s;
+        background-color: white;
+        position: relative;
+        margin: 0;
+        margin-left: 5px;
+        margin-right: 5px;
+        font-size: 16px;
+        border: none;
+        width: 95%;
+        height: 40px;
+        line-height: 1.5;
+        padding-left: 100px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .sidebar-button:hover {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .closebtn {
+        position: absolute;
+        top: 0;
+        right: 5px;
+        font-size: 20px;
+    }
+
+    .image-text {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        margin-left: 5px;
+    }
+
+    .image-text img {
+        border-radius: 50%;
+        border-color: black;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+
+    .sidebar-image {
+        text-align: left;
+        margin-top: auto;
+        margin-bottom: 20px;
+    }
+
+    .sidebar-image img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+
+    .sidebar-button:focus {
+        outline: none;
+    }
+
+    hr {
+        border: none;
+        background-color: black;
+        height: 1px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .image-button {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .image-button img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .title {
+        margin: 0;
+    }
+
+    #requestDropdown {
+        display: none;
+    }
+
+    #requestDropdown a {
+        padding: 1px 3px;
+        text-decoration: none;
+        display: block;
+        color: #333;
+    }
+
+    #requestDropdown a:hover {
+        background-color: #f1f1f1;
+    }
+
+    #noticeDropdown {
+        display: none;
+    }
+
+    #noticeDropdown a {
+        padding: 1px 3px;
+        text-decoration: none;
+        display: block;
+        color: #333;
+    }
+
+    #noticeDropdown a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .rotate-down {
+        transform: rotate(90deg);
+        transition: transform 0.3s ease;
+    }
+
+    .rotate-down.active {
+        transform: rotate(180deg);
+    }
+
+    @media (max-width: 768px) {
+        .image-frame {
+            width: 150px;
+            height: 150px;
+        }
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">School Van Management System</a>
+            <button class="navbar-toggler" type="button" id="toggleNav" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <!-- Add the "Open" button to toggle the navigation bar -->
+                    <li class="nav-item">
+                        <a class="nav-link open-btn" href="javascript:void(0);" onclick="openNav()"><i class="bi bi-text-left" ></i> Open</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class='container-fluid'>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="card">
+                        <!-- Reduce image size and make it circular -->
+                        <div class="image-frame">
+                            <img src="{{ driver.profile_image.url }}" class="card-img-top" alt="{{ driver.first_name }}'s Profile">
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title">{{ driver.first_name }} {{ driver.last_name }}</h2>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Father's Name:</strong> {{ driver.father_name }}</li>
+                                <li class="list-group-item"><strong>Address:</strong> {{ driver.address }}</li>
+                                <li class="list-group-item"><strong>Area:</strong> {{ driver.area }}</li>
+                                <li class="list-group-item"><strong>Van No:</strong> {{ driver.van }}</li>
+                                <li class="list-group-item"><strong>Van Capacity:</strong> {{ driver.van_capacity }}</li>
+                                <li class="list-group-item"><strong>CNIC No:</strong> {{ driver.cnic }}</li>
+                                <li class="list-group-item"><strong>Email:</strong> {{ driver.email }}</li>
+                                <li class="list-group-item"><strong>Username:</strong> {{ driver.username }}</li>
+                                <li class="list-group-item"><strong>Phone No:</strong> {{ driver.phone_no }}</li>
+                                <li class="list-group-item"><strong>Driver ID:</strong> {{ driver.id }}</li>
+                                <li class="list-group-item"><strong>Fee Amount:</strong> {{ driver.fee_amount }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="container my-4">
+                        <div class="user-section bg-light p-4">
+                            <h2 class="text-left">View Your Students Info</h2>
+                            <p class="text-left">You can view your Students' information like (name, contact number, email, etc.)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="container my-4">
+                        <div class="user-section bg-light p-4">
+                            <h2 class="text-left">Update Your Info</h2>
+                            <p class="text-left">You can update your information that you provided earlier.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="container my-4">
+                        <div class="user-section bg-light p-4">
+                            <h2 class="text-left">Apply for Fee Increase/Delay</h2>
+                            <p class="text-left">You can request the Van owner for a delay and fee increase for approval. These requests will also be delivered to students by the owner using email and notifications after approval.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="container my-4">
+                        <div class="user-section bg-light p-4">
+                            <h2 class="text-left">View Complaints About You</h2>
+                            <p class="text-left">Students can report about your behavior to the owner, and the owner can take strict actions and also warn you.</p>
+                        </div>
+                    </div>
+
+                    <div class="container my-4">
+                        <div class="user-section bg-light p-4">
+                            <h2 class="text-left">View Your Requests Status</h2>
+                            <p class="text-left">You can view the status of your Fee Increase and Delay requests.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="overlay" id="overlay" onclick="closeNav()"></div>
+<div class='container-fluid'>
+    <div id="mySidebar" class="sidebar">
+        <button class="sidebar-button"><strong><i class="bi bi-car-front"></i> SVMS </strong></button>
+        <hr>
+
+        <a><button class="sidebar-button active"><i class="bi bi-layers-fill"></i>  DRIVER DASHBOARD </button></a>
+        
+        <a href="{% url 'driver_view_students' driver.id %}"><button class="sidebar-button"><i class="bi bi-person-vcard"></i>  View Students</button></a>
+        
+        <a href="{% url 'update_driver_info' driver.id %}"><button class="sidebar-button"><i class="bi bi-person-up"></i>  Update Info</button></a>
+
+        <a href="{% url 'driver_view_complaint' driver.id %}"><button class="sidebar-button"><i class="bi bi-info-square"></i> View Your Complaints    <span class="badge badge-pill badge-success">{{ complaint_count }}</span></button></a>
+            
+        <button class="sidebar-button" onclick="toggleDropdown('requestDropdown', 'caret3')">
+            <i class="bi bi-window-plus"></i> Requests
+            <i id="caret3" class="fas fa-caret-down"></i>
+        </button>
+        <div id="requestDropdown" class="dropdown-content">
+            <a href="{% url 'fee_inc_req' driver.id %}"><button class="sidebar-button"><i class="bi bi-cash"></i>  Request Fee Increase</button></a>
+            <a href="{% url 'delay_request' driver.id %}"><button class="sidebar-button"><i class="bi bi-clock-history"></i> Request Delay</button></a>
+        </div>
+        
+        <button class="sidebar-button" onclick="toggleDropdown('noticeDropdown', 'caret4')">
+            <i class="bi bi-megaphone"></i>  Drivers Notice <span class="badge badge-pill badge-success">{{ all_notice }}</span>
+            <i id="caret4" class="fas fa-caret-down"></i>
+        </button>
+        <div id="noticeDropdown" class="dropdown-content">
+            <a href="{% url 'driver_fee_requests_view' driver.id %}"><button class="sidebar-button"><i class="bi bi-exclamation-triangle"></i>  View Fee Notice <span class="badge badge-pill badge-success">{{ fee_inc_count }}</span></button></a>
+            <a href="{% url 'driver_delay_requests' driver.id %}"><button class="sidebar-button"><i class="bi bi-exclamation-triangle"></i>  View Delay Notice <span class="badge badge-pill badge-success">{{ delay_count }}</span></button></a>
+        </div>
+        
+        <a href="{% url 'driver_fee_records' driver.id %}"><button class="sidebar-button"><i class="bi bi-bank2"></i>  View Your Fee Leagder   <span class="badge badge-pill badge-success">{{ complaint_count }}</span></button></a>
+        
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    
+        <div class="sidebar-image"style="color: black;"> 
+            <a style="color: black;">
+            <hr>
+            <div class="image-button" onclick="handleButtonClick()">
+                <img src="{{ driver.profile_image.url }}" alt="{{ driver.first_name }}'s Profile">
+                <div><strong>{{ driver.first_name }} {{ driver.last_name }}   </strong><i class="bi bi-box-arrow-left" style="font-size: 20px;" onclick="logoutDriverPortal()"></i></a></div>
+            </div>
+        </a>
+    </div>
+</div> 
+<script>
+    function openNav() {
+        document.getElementById("mySidebar").style.left = "0";
+        document.getElementById("overlay").style.width = "100%"; // Expand the overlay
+        document.getElementById("overlay").style.opacity = "1"; // Make overlay visible
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.left = "-250px"; /* Adjust the width of the sidebar */
+        document.getElementById("overlay").style.width = "0"; // Collapse the overlay
+        document.getElementById("overlay").style.opacity = "0"; // Make overlay invisible
+    }
+
+    function toggleDropdown(id, caretId) {
+        var dropdown = document.getElementById(id);
+        var caret = document.getElementById(caretId);
+    
+        if (dropdown.style.display === 'block') {
+            dropdown.style.display = 'none';
+            caret.classList.remove('rotate-down'); // Remove the class to reset rotation
+        } else {
+            dropdown.style.display = 'block';
+            caret.classList.add('rotate-down'); // Add the class to rotate the caret
+        }
+    }
+    
+    // Close the dropdown when clicking outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.sidebar-button')) {
+            var dropdowns = document.getElementsByClassName('dropdown-content');
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.style.display === 'block') {
+                    openDropdown.style.display = 'none';
+                    // Reset rotation when closing
+                    var caretId = openDropdown.id.replace("Dropdown", "caret");
+                    document.getElementById(caretId).classList.remove('rotate-down');
+                }
+            }
+        }
+    }
+    function logoutDriverPortal() {
+        // You can add any additional logout logic here, such as clearing user sessions or cookies.
+        // For this example, we will simply redirect the user to a logout URL.
+        window.location.href = "{% url 'logout' %}"; // Replace with your logout URL
+    };
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

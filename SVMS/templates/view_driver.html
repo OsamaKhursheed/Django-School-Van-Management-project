@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Driver Information - School Van Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+
+    .info-card {
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .info-card img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 15px;
+    }
+
+    .info-card h5 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .info-card p {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .info-card .list-group {
+        padding: 0;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .approve-btn,
+    .reject-btn {
+        width: 49%;
+    }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+    <header class="bg-primary text-white py-3">
+        <div class="container text-center">
+            <h1>VIEW YOUR DRIVER INFORMATION</h1>
+        </div>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Driver Info Portal</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_portal' student.id %}">Back</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% if messages %}
+    <div class="container-fluid mt-4">
+        {% for message in messages %}
+            <div id="alert-{{ forloop.counter }}" class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'error' %}alert-danger{% endif %}" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <script>
+                setTimeout(function() {
+                    document.getElementById("alert-{{ forloop.counter }}").style display = "none";
+                }, 2000);
+            </script>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card info-card">
+                    <img src="{{ driver.profile_image.url }}" class="card-img-top" alt="{{ driver.first_name }}'s Profile">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ driver.first_name }} {{ driver.last_name }}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Father's Name:</strong> {{ driver.father_name }}</li>
+                            <li class="list-group-item"><strong>Area:</strong> {{ driver.area }}</li>
+                            <li class="list-group-item"><strong>CNIC:</strong> {{ driver.cnic }}</li>
+                            <li class="list-group-item"><strong>Van:</strong> {{ driver.van }}</li>
+                            <li class="list-group-item"><strong>Van Capacity:</strong> {{ driver.van_capacity }}</li>
+                            <li class="list-group-item"><strong>Email:</strong> {{ driver.email }}</li>
+                            <li class="list-group-item"><strong>Phone No:</strong> {{ driver.phone_no }}</li>
+                            <li class="list-group-item"><strong>Driver ID:</strong> {{ driver.id }}</li>
+                            <li class="list-group-item"><strong>Driver fee:</strong> {{ driver.fee_amount }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

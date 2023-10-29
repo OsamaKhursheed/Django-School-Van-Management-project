@@ -1,0 +1,268 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+    {% if user_role == 'fee_increase' %}
+        Drivers Fee Increase Request - School Van Management System</title>
+    {% elif user_role == 'delay' %}
+        Drivers Delay Request - School Van Management System</title>
+    {% elif user_role == 'complain' %}
+        Complain Approval - School Van Management System</title>
+    {% endif %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+
+    .complain-form {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content {
+        border-radius: 5px;
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+    .complaint-card {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+
+    .complaint-card:hover {
+        transform: scale(1.02);
+    }
+
+    .complaint-card .card-body {
+        padding: 15px;
+    }
+
+    .complaint-card .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .complaint-card .card-text {
+        font-size: 16px;
+        color: #555;
+    }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+<header class="bg-primary text-white py-3">
+    <div class="container text-center">        
+    {% if user_role == 'fee_increase' %}
+        <h1>Drivers Fee Increase Request</h1>
+    {% elif user_role == 'delay' %}
+        <h1>Drivers Delay Request</h1>
+    {% elif user_role == 'complain' %}
+        <h1>Complain Approval</h1>
+    {% endif %}
+    </div>
+</header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            {% if user_role == 'fee_increase' %}
+                Drivers Fee Increase Request Portal</a>
+            {% elif user_role == 'delay' %}
+                Drivers Delay Request Portal</a>
+            {% elif user_role == 'complain' %}
+                Complain Approval Portal</a>
+            {% endif %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'owner_portal' %}">Back</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% if messages %}
+<div class="container-fluid mt-4">
+    {% for message in messages %}
+        <div id="alert-{{ forloop.counter }}" class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'error' %}alert-danger{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById("alert-{{ forloop.counter }}").style.display = "none";
+            }, 2000); 
+        </script>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="container mt-4">
+    <div class="row">
+        {% if user_role == 'complain' %}        
+        {% for complaint in complaints %}
+        <div class="col-md-6">
+            <div class="card complaint-card">
+                <div class="card-header text-center">
+                    <strong>Complain ID: {{ complaint.id }}</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Complaint by Student ID:</strong> {{ complaint.student_id.id }}</p>
+                    <p class="card-text"><strong>Complain Content:</strong> {{ complaint.complain_content }}</p>
+                    <p class="card-text"><strong>Driver ID:</strong> {{ complaint.driver_id }}</p>
+                    <p class="card-text"><strong>Time:</strong> {{ complaint.time_of_complain }}</p>
+                    <p class="card-text"><strong>Date:</strong> {{ complaint.day_of_complain }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-danger btn-block mt-2" type="button" data-toggle="collapse" data-target="#commentCollapse{{ complaint.id }}" data-action="reject" aria-expanded="false" aria-controls="commentCollapse{{ complaint.id }}" onclick="setAction('reject')">
+                        Reject
+                    </button>
+                    <button class="btn btn-primary btn-block mt-2" type="button" data-toggle="collapse" data-target="#commentCollapse{{ complaint.id }}" data-action="accept" aria-expanded="false" aria-controls="commentCollapse{{ complaint.id }}" onclick="setAction('accept')">
+                        Accept
+                    </button>
+                    <script>
+                        function setAction(action) {
+                            document.querySelector('input[name="action"]').value = action;
+                            document.querySelector('form').action = `{% url 'update_complaint' complaint.id %}?action=${action}`;
+                        }
+                    </script>
+                    <div class="collapse mt-2" id="commentCollapse{{ complaint.id }}" data-action="">
+                        <div class="card card-body">
+                            <form method="post" action="{% url 'update_complaint' complaint.id %}" class="mb-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="complaint_id" value="{{ complaint.id }}">
+                                <input type="hidden" name="action" value="">
+                                <div class="form-group">
+                                    <textarea class="form-control" name="driver_comment" rows="4" placeholder="Write your comment here..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif user_role == 'fee_increase' %}
+        {% for fee in fee_increase %}
+        <div class="col-md-6">
+            <div class="card complaint-card">
+                <div class="card-header text-center">
+                    <strong>FEE_REQ ID: {{ fee.id }}</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Request by Driver ID:</strong> {{ fee.Driver_id.id }}</p>
+                    <p class="card-text"><strong>Fee Increase Reason:</strong> {{ fee.reason }}</p>
+                    <p class="card-text"><strong>Increase Amount:</strong> {{ fee.amount }}</p>
+                    <p class="card-text"><strong>Time Of Complaint:</strong> {{ fee.time_of_complain }}</p>
+                    <p class="card-text"><strong>Date Of Complaint:</strong> {{ fee.day_of_complain }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-danger btn-block mt-2" type="button" data-toggle="collapse" data-target="#commentCollapse{{ fee.id }}" data-action="reject" aria-expanded="false" aria-controls="commentCollapse{{ fee.id }}" onclick="setAction('reject')">
+                        Reject
+                    </button>
+                    <button class="btn btn-primary btn-block mt-2" type="button" data-toggle="collapse" data-target="#commentCollapse{{ fee.id }}" data-action="accept" aria-expanded="false" aria-controls="commentCollapse{{ fee.id }}" onclick="setAction('accept')">
+                        Accept
+                    </button>
+                </div>
+                <script>
+                    function setAction(action) {
+                        document.querySelector('input[name="action"]').value = action;
+                        document.querySelector('form').action = `{% url 'response_fee_req' fee.id %}?action=${action}`;
+                    }
+                </script>
+                <div class="collapse mt-2" id="commentCollapse{{ fee.id }}" data-action="">
+                    <div class="card card-body">
+                        <form method="post" action="{% url 'response_fee_req' fee.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="delay_id" value="{{ fee.id }}">
+                            <input type="hidden" name="action" value="">
+                            <div class="form-group">
+                                <label for="modified_amount">Modified Amount</label>
+                                <input type="number" class="form-control" name="modified_amount" id="modified_amount" value="{{ fee.amount }}" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" name="owner_comment" rows="4" placeholder="Write your comment here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>                
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif user_role == 'delay' %}
+        {% for delay in delays %}
+        <div class="col-md-6">
+            <div class="card complaint-card">
+                <div class="card-header text-center">
+                    <strong>DELAY_REQ ID: {{ delay.id }}</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Request by Driver ID:</strong> {{ delay.driver_id.id }}</p>
+                    <p class="card-text"><strong>Delay Reason:</strong> {{ delay.reason }}</p>
+                    <p class="card-text"><strong>Arrival Time:</strong> {{ delay.time }}</p>
+                    <p class="card-text"><strong>Delay Day:</strong> {{ delay.date }}</p>
+                    <p class="card-text"><strong>Time Of Complaint:</strong> {{ delay.time_of_complain }}</p>
+                    <p class="card-text"><strong>Date Of Complaint:</strong> {{ delay.day_of_complain }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-danger btn-block mt-2" type="button" data-toggle="collapse" data-target="#commentCollapse{{ delay.id }}" data-action="reject" aria-expanded="false" aria-controls="commentCollapse{{ delay.id }}" onclick="setAction('reject')">
+                        Reject
+                    </button>
+                    <button class="btn btn-primary btn-block mt-2" type="button" data-toggle="collapse" data-target="#commentCollapse{{ delay.id }}" data-action="accept" aria-expanded="false" aria-controls="commentCollapse{{ delay.id }}" onclick="setAction('accept')">
+                        Accept
+                    </button>
+                    <script>
+                        function setAction(action) {
+                            document.querySelector('input[name="action"]').value = action;
+                            document.querySelector('form').action = `{% url 'response_delay_req' delay.id %}?action=${action}`;
+                        }
+                    </script>
+                    <div class="collapse mt-2" id="commentCollapse{{ delay.id }}" data-action="">
+                        <div class="card card-body">
+                            <form method="post" action="{% url 'response_delay_req' delay.id %}" class="mb-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="delay_id" value="{{ delay.id }}">
+                                <input type="hidden" name="action" value="">
+                                <div class="form-group">
+                                    <textarea class="form-control" name="owner_comment" rows="4" placeholder="Write your comment here..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

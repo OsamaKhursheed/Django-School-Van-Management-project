@@ -1,0 +1,140 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VIEW Your FEES - School Van Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+
+    .complain-form {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content {
+        border-radius: 5px;
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f8f9fa;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e2e6ea;
+    }
+    @media (max-width: 768px) {
+        .image-frame {
+            width: 150px;
+            height: 150px;
+        }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+<header class="bg-primary text-white py-3">
+    <div class container text-center">
+        <h1>Students Fees View Portal</h1>
+    </div>
+</header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Students Fees View Portal</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'student_portal' student.id %}">Back</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2 class="text-center">View/Update Fee Records</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Driver Name</th>
+                    <th>Fee Amount</th>
+                    <th>Month of Fee</th>
+                    <th>Date of Fee Issue</th>
+                    <th>Due Date of Fee</th>
+                    <th>Status</th>
+                    <th>Date Of Submittion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in fees %}
+                <tr>
+                    <td>{{ fee.student_id.first_name }} {{ fee.student_id.last_name }}</td>
+                    <td>{{ fee.driver_id.first_name }} {{ fee.driver_id.last_name }}</td>
+                    <td>${{ fee.fee_amount }}</td>
+                    <td>{{ fee.month_of_fee|date:"F Y" }}</td>
+                    <td>{{ fee.date_of_fee_issue|date:"d/m/Y" }}</td>
+                    <td>{{ fee.due_date_of_fee|date:"d/m/Y" }}</td>
+                    <td>
+                        {% if fee.status == 'Paid' %}
+                            <span class="badge badge-success">{{ fee.status }}</span>
+                        {% elif fee.status == 'Pending' %}
+                            <span class="badge badge-warning">{{ fee.status }}</span>
+                        {% else %}
+                            <span class="badge badge-danger">{{ fee.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ fee.date_of_submission }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="text-center">Total Fees Paid:</h4>
+                <p class="text-center">${{ total_fees_paid }}</p>
+            </div>
+            <div class="col-md-6">
+                <h4 class="text-center">Total Fees Balance:</h4>
+                <p class="text-center">${{ total_fees_balance }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

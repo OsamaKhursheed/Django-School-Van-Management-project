@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Students - School Van Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+
+    .info-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+        border-radius: 50px;
+    }
+
+    .info-card img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 15px;
+    }
+
+    .info-card h4 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .info-card p {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .info-card .card-body {
+        padding: 0;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .approve-btn,
+    .reject-btn {
+        width: 49%;
+    }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+    <header class="bg-primary text-white py-3">
+        <div class="container text-center">
+            <h1>VIEW STUDENTS INFORMATION</h1>
+        </div>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Student Info Portal</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'driver_portal' driver.id %}">Back</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% if messages %}
+    <div class="container-fluid mt-4">
+        {% for message in messages %}
+            <div id="alert-{{ forloop.counter }}" class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'error' %}alert-danger{% endif %}" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <script>
+                setTimeout(function() {
+                    document.getElementById("alert-{{ forloop.counter }}").style.display = "none";
+                }, 2000); 
+            </script>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+<div class="container mt-4">
+    <div class="row"> {% for student in students %}
+            <div class="col-md-6">
+                <div class="card info-card">
+                    <img src="{{ student.profile_image.url }}" class="card-img-top" alt="{{ student.first_name }}'s Profile">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ student.first_name }} {{ student.last_name }}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Father's Name:</strong> {{ student.father_name }}</li>
+                            <li class="list-group-item"><strong>Address:</strong> {{ student.address }}</li>
+                            <li class="list-group-item"><strong>Area:</strong> {{ student.area }}</li>
+                            <li class="list-group-item"><strong>Roll No:</strong> {{ student.roll_no }}</li>
+                            <li class="list-group-item"><strong>Grade:</strong> {{ student.grade }}</li>
+                            <li class="list-group-item"><strong>Email:</strong> {{ student.email }}</li>
+                            <li class="list-group-item"><strong>Phone No:</strong> {{ student.phone_no }}</li>
+                            <li class="list-group-item"><strong>Student ID:</strong> {{ student.id }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

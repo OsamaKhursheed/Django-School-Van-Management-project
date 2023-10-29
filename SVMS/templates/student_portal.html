@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Portal - School Van Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+    .image-frame {
+        border-radius: 50%;
+        overflow: hidden;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        display: flex; 
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .image-frame img {
+        width: 100%;
+        height: 100%; 
+        object-fit: cover;
+        margin-left: 5px;
+    }
+
+    .open-btn {
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .sidebar {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 0px;
+        left: -250px;
+        background-color: white;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 25px;
+        border-radius: 0 0 15px 0;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    .sidebar-button {
+        text-align: left;
+        text-decoration: none;
+        color: black;
+        transition: 0.3s;
+        background-color: white;
+        position: relative;
+        margin: 0;
+        margin-left: 5px;
+        margin-right: 5px;
+        font-size: 16px;
+        border: none;
+        width: 95%;
+        height: 40px;
+        line-height: 1.5;
+        padding-left: 100px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .sidebar-button:hover {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .closebtn {
+        position: absolute;
+        top: 0;
+        right: 5px;
+        font-size: 20px;
+    }
+
+    .image-text {
+        display: flex;
+        align-items: center;
+        font-size:15px;
+        margin-left:5px;
+    }
+
+    .image-text img {
+        border-radius: 50%;
+        border-color:black;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+
+    .sidebar-image {
+        text-align: left;
+        margin-top: auto;
+        margin-bottom: 20px;
+    }
+
+    .sidebar-image img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        object-fit: cover; 
+    }
+    .sidebar-button:focus {
+        outline: none;
+    }
+
+    hr {
+        border: none;
+        background-color: black;
+        height: 1px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+        margin-right: 10px; 
+    }
+    
+    .image-button {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .image-button img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px; 
+        object-fit: cover; 
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+
+    .title {
+        margin: 0;
+    }
+    #noticeDropdown {
+        display: none;
+    }
+
+    #noticeDropdown a {
+        padding: 1px 3px;
+        text-decoration: none;
+        display: block;
+        color: #333;
+    }
+
+    #noticeDropdown a:hover {
+        background-color: #f1f1f1;
+    }
+    .rotate-down {
+        transform: rotate(90deg);
+        transition: transform 0.3s ease;
+    }
+    
+    .rotate-down.active {
+        transform: rotate(180deg);
+    }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+    @media (max-width: 768px) {
+        .image-frame {
+            width: 150px;
+            height: 150px;
+        }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">School Van Management System</a>
+        <button class="navbar-toggler" type="button" id="toggleNav" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- Add the "Open" button to toggle the navigation bar -->
+                <li class="nav-item">
+                    <a class="nav-link open-btn" href="javascript:void(0);" onclick="openNav()"><i class="bi bi-text-left" ></i> Open</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+<div class="container-fluid mt-4">
+    {% for message in messages %}
+        <div id="alert-{{ forloop.counter }}" class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'error' %}alert-danger{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <!-- Add JavaScript to auto-hide the message after 5 seconds -->
+        <script>
+            setTimeout(function() {
+                document.getElementById("alert-{{ forloop.counter }}").style.display = "none";
+            }, 2000); 
+        </script>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class='container-fluid'>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="card">
+                    <!-- Reduce image size and make it circular -->
+                    <div class="image-frame">
+                        <img src="{{ student.profile_image.url }}" class="card-img-top" alt="{{ student.first_name }}'s Profile">
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title">{{ student.first_name }} {{ student.last_name }}</h2>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Student ID:</strong> {{ student.id }}</li>
+                            <li class="list-group-item"><strong>Father's Name:</strong> {{ student.father_name }}</li>
+                            <li class="list-group-item"><strong>Address:</strong> {{ student.address }}</li>
+                            <li class="list-group-item"><strong>Area:</strong> {{ student.area }}</li>
+                            <li class="list-group-item"><strong>Roll No:</strong> {{ student.roll_no }}</li>
+                            <li class="list-group-item"><strong>Grade:</strong> {{ student.grade }}</li>
+                            <li class="list-group-item"><strong>Email:</strong> {{ student.email }}</li>
+                            <li class="list-group-item"><strong>Username:</strong> {{ student.username }}</li>
+                            <li class="list-group-item"><strong>Phone No:</strong> {{ student.phone_no }}</li>
+                            <li class="list-group-item"><strong>Driver ID:</strong> {{ student.driver_id.id }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="container my-4">
+                    <div class="container-fluid bg-light p-4">
+                        <h2 class="text-left">View Driver Info</h2>
+                        <p class="text-left">You can view your driver info like(name,contact number,email,etc.)</p>
+                    </div>
+                </div>
+                
+                <div class="container my-4">
+                    <div class="container-fluid bg-light p-4">
+                        <h2 class="text-left">Update Your Info</h2>
+                        <p class="text-left">You can update your information,you provided earlier.</p>
+                    </div>
+                </div>
+                
+                <div class="container my-4">
+                    <div class="container-fluid bg-light p-4">
+                        <h2 class="text-left">View Fee Increase/Delay Notifications</h2>
+                        <p class="text-left">you can view driver delay and fee increase Notifications that was approved by your van Owner.</p>
+                    </div>
+                </div>
+                
+                <div class="container my-4">
+                    <div class="container-fluid bg-light p-4">
+                        <h2 class="text-left">Report Driver</h2>
+                        <p class="text-left">You can report your driver missbehaviour and other concerns about your driver to your van owner.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="overlay" id="overlay" onclick="closeNav()"></div>
+<div class='container-fluid'>
+    <div id="mySidebar" class="sidebar">
+        <button class="sidebar-button"><strong><i class="bi bi-car-front"></i> SVMS </strong></button>
+        <hr>
+        <a><button class="sidebar-button active"><i class="bi bi-layers-fill"></i>  STUDENT DASHBOARD </button></a>
+        <a href="{% url 'view_driver' student.id %}"><button class="sidebar-button"><i class="bi bi-person-vcard"></i>   View Driver</button></a>
+        
+        <a href="{% url 'update_information' student.id %}"><button class="sidebar-button"><i class="bi bi-person-up"></i>  Update Info</button></a>
+        
+        <a href="{% url 'driver_complain' student.id %}"><button class="sidebar-button"><i class="bi bi-c-square"></i>   Driver Complain</button></a>
+        
+        <a href="{% url 'complain_status_Stu' student.id %}"><button class="sidebar-button"><i class="bi bi-file-earmark-text"></i> Complaint Status <span class="badge badge-pill badge-success">{{ complaint_count }}</span></button></a>
+        
+        <button class="sidebar-button" onclick="toggleDropdown('noticeDropdown', 'caret4')">
+            <i class="bi bi-megaphone"></i>   Drivers Notices <span class="badge badge-pill badge-success"">{{ all_notice }}</span>
+            <i id='caret4' class="fas fa-caret-down"></i>   
+        </button>
+        <div id="noticeDropdown" class="dropdown-content">
+            <a href="{% url 'view_driver_requests' student.id %}"><button class="sidebar-button"><i class="bi bi-exclamation-triangle"></i>   View Fee Notice <span class="badge badge-pill badge-success">{{ fee_inc_count }}</span></button></a>
+            <a href="{% url 'view_delay_requests' student.id %}"><button class="sidebar-button"><i class="bi bi-exclamation-triangle"></i>   View Delay Notice <span class="badge badge-pill badge-success">{{ delay_count }}</span></button></a>
+        </div>
+        
+        <a href="{% url 'view_student_fee_history' student.id %}"><button class="sidebar-button"><i class="bi bi-bank2"></i>  My General Ledger</button></a>
+    
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div class="sidebar-image"style="color: black;"> 
+        <a style="color: black;">
+        <hr>
+        <div class="image-button" onclick="handleButtonClick()">
+            <img src="{{ student.profile_image.url }}" alt="{{ student.first_name }}'s Profile">
+            <div><strong>{{ student.first_name }} {{ student.last_name }}  </strong><i class="bi bi-box-arrow-left" style="font-size: 20px;" onclick="logoutStudentPortal()"></i></a></div>
+        </div>
+    </a>
+    </div>
+</div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.left = "0";
+            document.getElementById("overlay").style.width = "100%"; // Expand the overlay
+            document.getElementById("overlay").style.opacity = "1"; // Make overlay visible
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.left = "-250px";
+            document.getElementById("overlay").style.width = "0"; // Collapse the overlay
+            document.getElementById("overlay").style.opacity = "0"; // Make overlay invisible
+                function toggleDropdown(id) {
+            var dropdown = document.getElementById(id);
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        }
+    
+        // Close the dropdown when clicking outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.sidebar-button')) {
+                var dropdowns = document.getElementsByClassName('dropdown-content');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        }
+        }
+        function toggleDropdown(id, caretId) {
+            var dropdown = document.getElementById(id);
+            var caret = document.getElementById(caretId);
+        
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+                caret.classList.remove('rotate-down');
+            } else {
+                dropdown.style.display = 'block';
+                caret.classList.add('rotate-down');
+            }
+        }
+        window.onclick = function (event) {
+            if (!event.target.matches('.sidebar-button')) {
+                var dropdowns = document.getElementsByClassName('dropdown-content');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                        var caretId = openDropdown.id.replace("Dropdown", "caret");
+                        document.getElementById(caretId).classList.remove('rotate-down');
+                    }
+                }
+            }
+        }
+        function logoutStudentPortal() {
+            window.location.href = "{% url 'logout' %}";
+        };
+    </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

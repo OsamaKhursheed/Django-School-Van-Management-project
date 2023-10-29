@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Transportation System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .navbar-nav .nav-link {
+        position: relative;
+        padding: 10px 20px;
+        margin: 0 10px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background-color: ORANGE;
+        color: white;
+        border-color: ORANGE;
+    }
+
+    .h-custom {
+        height: 600px;
+        object-fit: cover;
+    }
+
+    .carousel-indicators {
+        position: relative;
+        top: 100%;
+        right: 0;
+        text-align: center;
+        background: transparent;
+        z-index: 1;
+    }
+
+    .carousel-indicators li {
+        width: 50px;
+        height: 50px;
+        top: 100%;
+        border-radius: 50%;
+        margin: 0 5px;
+        background-color: transparent;
+        border: 2px solid transparent;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+    }
+
+    .carousel-indicators .indicator-image {
+        position: relative;
+        top: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        border: 0.5px solid black;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .carousel-indicators .indicator-image:hover {
+        width: 150%;
+        height: 150%;
+    }
+    
+    .carousel-indicators {
+        bottom: 50px;
+    }
+
+    .carousel-indicators li {
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+    }
+
+    .text-box {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 1%;
+        border-radius: 10px;
+        text-align: center;
+        position: relative;
+        top: -90px;
+        width: 60%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .text-box p {
+        font-size: 100%;
+        margin: -10px;
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    
+    @media (max-width: 768px) {
+        .text-box {
+            width: 60%;
+            max-width: 100%;
+            top: -90px;
+            left: 0;
+            transform: none;
+        }
+    }
+    
+    .text-white {
+        color: #fff;
+    }
+
+    .transparent-box-automate {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 1%;
+        border-radius: 10px;
+        position: relative;
+        top: -200px;
+        width: 40%;
+        left: 75%;
+        text-align: justify;
+    }
+
+    .transparent-box-data {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 1%;
+        border-radius: 10px;
+        position: relative;
+        left: -20%;
+        top: -225px;
+        width: 40%;
+        text-align: justify;
+    }
+
+    .transparent-box-online {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 1%;
+        border-radius: 10px;
+        position: relative;
+        left: -20%;
+        top: -150px;
+        width: 30%;
+        text-align: justify;
+    }
+
+    .online_para {
+        font-size: 90%;
+    }
+
+    @media (max-width: 768px) {
+        .transparent-box-automate{
+            padding:1%;
+            width: 100%;
+            max-width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .transparent-box-data {
+            padding:1%;
+            width: 100%;
+            max-width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .online_para {
+            font-size: 90%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .transparent-box-online {
+            padding:1%;
+            width: 100%;
+            max-width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .online_para {
+            font-size: 90%;
+        }
+    }
+
+    .user-section {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .user-section:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .user-section p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #333;
+    }
+    .carousel-caption1 {
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .carousel-caption1 h2 {
+        font-size: 150%;
+        color: blue;
+    }
+    
+    .carousel-caption1 p {
+        font-size: 100%;
+        color: black;
+    }
+    
+    .carousel-item img {
+        width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+    
+    /* Media query for responsiveness */
+    @media (max-width: 768px) {
+        .carousel-caption1 {
+            margin: 10px;
+            padding: 10px;
+            width: 100%;
+            height: 100%;
+
+        }
+    
+        .carousel-caption1 h2 {
+            font-size: 130%;
+        }
+    
+        .carousel-caption1 p {
+            font-size: 80%;
+        }
+    
+        .carousel-item img {
+            width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+    }
+    
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+<div class='container-fluid'>
+    <header class="bg-dark text-white py-1">
+        <div class="container text-center">
+            <h1>Welcome to Transportation System</h1>
+        </div>
+    </header>
+</div>
+<div class='container-fluid'>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">School Van Management System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_us' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact_us' %}">Contact Us</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            User Login
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="{% url 'student_login' %}">Student Login</a>
+                            <a class="dropdown-item" href="{% url 'driver_login' %}">Driver Login</a>
+                            <a class="dropdown-item" href="{% url 'owner_login' %}">Owner Login</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="signInDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sign In
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="signInDropdown">
+                            <a class="dropdown-item" href="{% url 'student_signin' %}">Student Sign In</a>
+                            <a class="dropdown-item" href="{% url 'driver_signin' %}">Driver Sign In</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class='container-fluid'>
+    <div id="imageCarousel" class="carousel slide" data-ride="carousel" data-interval="3000" style="height: 400px; width: 100%; overflow: hidden; margin-top: 20px;">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <img src="media/home_images/svms2.jpeg" alt="Image 1" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class="text-box">
+                            <h2 class="text-white">WELCOME</h2>
+                            <p class="text-white">To<br>School Van Management System</p>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/apply_online.jpg" alt="Image 2" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class='container-fluid'>
+                            <div class="transparent-box-online">
+                                <p class="online_para">
+                                    Students and drivers can easily apply for registration online through our website. Whether you're a student seeking for reliable transportation or a skilled driver looking to join our team, our online registration process simplifies the journey. Join us today and be a part of our School Van Management System.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/data_protection1.jpg" alt="Image 3" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class='container-fluid'>
+                            <div class="transparent-box-data">
+                                <p class="online_para">
+                                    We prioritize user privacy by displaying only necessary and relevant information drivers to Students and students to Drivers. Your experience is tailored to provide essential details, ensuring the utmost confidentiality and ease of use within our platform.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/automation.jpg" alt="Image 4" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class="transparent-box-automate">
+                            <p class="online_para">
+                                Our system is fully automated, streamlining various tasks to enhance your experience. From sending essential emails for updates and notifications to generating fee vouchers effortlessly, our platform efficiently assigns drivers to students, ensuring a seamless and hassle-free process.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/problem_solution.jpg" alt="Image 5" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class="transparent-box-automate">
+                            <p class="online_para">
+                                At School Van Management System, we prioritize open communication and problem resolution. Students can easily voice their concerns about drivers or other issues, while drivers can request fee adjustments or report delays due to unforeseen circumstances. Our system facilitates prompt action by van owners, ensuring a responsive and supportive environment for all
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/report.jpg" alt="Image 6" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class="transparent-box-data">
+                            <p class="online_para">
+                                At School Van Management System, user privacy and security are paramount. Our platform ensures that users can access necessary information securely. Students can also voice their concerns anonymously when filing complaints about drivers, guaranteeing a safe and confidential environment for all.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/latest_news.jpg" alt="Image 7" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption">
+                        <div class="transparent-box-automate">
+                            <p class="online_para">
+                                Our system provides notifications for user requests, delivering updates both on the portal and through email. This ensures that users stay informed about their requests, making communication efficient and accessible.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="media/home_images/fee.jpg" alt="Image 8" style="width: 100%; height: 500px;">
+                    <div class="carousel-caption ">
+                        <div class="transparent-box-data">
+                            <p class="online_para">
+                                Our system excels in fee management. It automates fee record creation, sending vouchers via email to students. Automated reminders notify students of fee dues. Furthermore, both drivers and students can access their general ledger and fee records, ensuring transparency and convenience
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="col-md-6 col-sm-12">
+                        <img src="media/home_images/about.jpg" alt="Image 9" class="img-fluid">
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="carousel-caption1">
+                            <h2>ABOUT US</h2>
+                            <p>
+                                We are a dedicated team of students from Usman Institute of Technology (UIT) with a passion for solving real-world problems. Our journey began in 2021, and we are excited to present our School Van Management System, designed to streamline transportation for students, drivers, and van owners. Learn more about us!
+                            </p>
+                            <div class="cap-button">
+                                <a href="{% url 'about_us' %}" class="btn btn-primary">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="col-md-6 col-sm-12">
+                        <img src="media/home_images/contact.jpg" alt="Image 10" class="img-fluid">
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="carousel-caption1">
+                            <h2>CONTACT US</h2>
+                            <p>
+                                Have questions or need assistance with our School Van Management System? Feel free to get in touch with us. Our dedicated support team is here to help you with any inquiries or issues you may have. We value your feedback and look forward to assisting you.
+                            </p>
+                            <div class="cap-button">
+                                <a href="{% url 'contact_us' %}" class="btn btn-primary">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                       
+        </div>
+    </div>
+    <ol class="carousel-indicators">
+        <li data-target="#imageCarousel" data-slide-to="0" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/svms2.jpeg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="1" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/apply_online.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="2" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/data_protection1.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="3" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/automation.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="4" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/problem_solution.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="5" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/report.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="6" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/latest_news.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="7" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/fee.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="8" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/about.jpg');"></div>
+        </li>
+        <li data-target="#imageCarousel" data-slide-to="9" class="active">
+            <div class="indicator-image" style="background-image: url('media/home_images/contact.jpg');"></div>
+        </li>
+    </ol>
+</div>
+
+<div class='container-fluid'> 
+    <div class="container my-4" id="student">
+        <div class="user-section bg-light p-4">
+            <p>
+                <strong>This is my school van management project that is constructed in the Django framework.</strong> 
+                The project aims to streamline the management of school transportation, providing students, drivers, and owners with a seamless experience. It includes features such as student registration (subject to owner approval), driver registration (also subject to owner approval), request handling for delays and fee increases, viewing driver and student information, and generating fee vouchers.
+                <br><br>
+                The system is built on top of my prior experience, where I created similar applications using Tkinter in my 3rd and 4th semesters.
+            </p>
+        </div>
+    </div>
+    <div class="container my-4" id="student">
+        <div class="user-section bg-light p-4">
+            <h2>Student</h2>
+            <ul>
+                <li>Log in</li>
+                <li>Register (subject to owner approval)</li>
+                <li>Update Information</li>
+                <li>View Driver</li>
+                <li>Complain about Driver to Owner</li>
+                <li>View Driver Delay Notifications (subject to owner approval)</li>
+                <li>View Fee Details</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container my-4" id="driver">
+        <div class="user-section bg-light p-4">
+            <h2>Driver</h2>
+            <ul>
+                <li>Log in</li>
+                <li>Register (subject to owner approval)</li>
+                <li>Request Delay to Van Owner</li>
+                <li>Request Fee Increase</li>
+                <li>View Fee Details (subject to owner approval)</li>
+                <li>View Student Information (subject to owner approval)</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container my-4" id="owner">
+        <div class="user-section bg-light p-4">
+            <h2>Owner</h2>
+            <ul>
+                <li>Log in</li>
+                <li>Approve or Cancel Requests</li>
+                <li>Generate Fee Voucher</li>
+                <li>Send Email to Parents for Different Purposes</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
+                        <li><a href="{% url 'about_us' %}" class="text-white">About</a></li>
+                        <li><a href="{% url 'contact_us' %}" class="text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>User Login</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'student_login' %}" class="text-white">Student Login</a></li>
+                        <li><a href="{% url 'driver_login' %}" class="text-white">Driver Login</a></li>
+                        <li><a href="{% url 'owner_login' %}" class="text-white">Owner Login</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Sign In</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'student_signin' %}" class="text-white">Student Sign In</a></li>
+                        <li><a href="{% url 'driver_signin' %}" class="text-white">Driver Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <small>&copy; 2023 UIT 3Ediots Group - All rights reserved</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

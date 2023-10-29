@@ -1,0 +1,156 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+    {% if user_role == 'fee_increase' %}
+        Driver fee Icrease notification - School Van Management System
+    {% elif user_role == 'delay' %}
+        Driver Delay Notifications - School Van Management System
+    {% endif %}
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+
+    .complain-form {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content {
+        border-radius: 5px;
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+    .complaint-card {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+
+    .complaint-card:hover {
+        transform: scale(1.02);
+    }
+
+    .complaint-card .card-body {
+        padding: 15px;
+    }
+
+    .complaint-card .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .complaint-card .card-text {
+        font-size: 16px;
+        color: #555;
+    }
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+<header class="bg-primary text-white py-3">
+    <div class="container text-center">
+        <h1>Driver Request Status Portal</h1>
+    </div>
+</header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Driver Notifications Portal</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'driver_portal' driver.id %}">Back</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% if messages %}
+<div class="container-fluid mt-4">
+    {% for message in messages %}
+        <div id="alert-{{ forloop.counter }}" class="alert alert-dismissible fade show {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'error' %}alert-danger{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById("alert-{{ forloop.counter }}").style.display = "none";
+            }, 2000); 
+        </script>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="container mt-4">
+    <div class="row">
+        {% if user_role == 'fee_increase' %}
+        {% for fee_inc in fee_inc %}
+        <div class="col-md-6">
+            <div class="card complaint-card">
+                <div class="card-header text-center">
+                    <strong>Driver Fee Request ID: {{ fee_inc.id }}</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Driver ID:</strong> {{ fee_inc.Driver_id.id }}</p>
+                    <p class="card-text"><strong>Fee Icrease Reason:</strong> {{ fee_inc.reason }}</p>
+                    <p class="card-text"><strong>Amount Increase:</strong> {{ fee_inc.amount }}</p>
+                    <p class="card-text"><strong>Time Of Request:</strong> {{ fee_inc.time_of_complain }}</p>
+                    <p class="card-text"><strong>Date Of Request:</strong> {{ fee_inc.day_of_complain }}</p>
+                    <p class="card-text"><strong>Request Status:</strong> {{ fee_inc.owner_approval }}</p>
+                    <p class="card-text"><strong>Owner Comment:</strong> {{ fee_inc.owner_comments }}</p>
+                    <p class="card-text"><strong>New Fee Amount:</strong> {{ driver.fee_amount }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif user_role == 'delay' %}
+        {% for delay in delay_notice %}
+        <div class="col-md-6">
+            <div class="card complaint-card">
+                <div class="card-header text-center">
+                    <strong>Delay Request ID: {{ delay.id }}</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Driver ID:</strong> {{ delay.Driver_id.id }}</p>
+                    <p class="card-text"><strong>Delay Reason:</strong> {{ delay.reason }}</p>
+                    <p class="card-text"><strong>Date Of Delay:</strong> {{ delay.date }}</p>
+                    <p class="card-text"><strong>Time OF Arrival:</strong> {{ delay.time }}</p>
+                    <p class="card-text"><strong>Date Of Request approved:</strong> {{ delay.day_of_complain }}</p>
+                    <p class="card-text"><strong>Request Status:</strong> {{ delay.owner_approval }}</p>
+                    <p class="card-text"><strong>Owner Comment:</strong> {{ delay.owner_comments }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %} 
+        {% endif %}     
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
